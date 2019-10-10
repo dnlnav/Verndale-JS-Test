@@ -61,7 +61,7 @@ export function useListLogic() {
   const handleListItemHover = index => setHighlightedItem(index);
 
   const deleteInput = () => {
-    setInputValue([]);
+    setInputValue("");
     setHighlightedItem(-1);
   };
 

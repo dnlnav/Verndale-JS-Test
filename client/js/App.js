@@ -18,7 +18,7 @@ function App() {
     <Fragment>
       <div className="input-group">
         <input className="input" type="text" onChange={handleInputChange} onKeyDown={handleKeypress} value={inputValue} />
-        <span className="delete-button" onClick={deleteInput}>&times;</span>
+        {inputValue && <span className="delete-button" onClick={deleteInput}>&times;</span> }
       </div>
       <ul className="list">
         {itemList.map((state, index) =>

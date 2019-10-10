@@ -9661,7 +9661,7 @@
 	      'div',
 	      { className: 'input-group' },
 	      _react2.default.createElement('input', { className: 'input', type: 'text', onChange: handleInputChange, onKeyDown: handleKeypress, value: inputValue }),
-	      _react2.default.createElement(
+	      inputValue && _react2.default.createElement(
 	        'span',
 	        { className: 'delete-button', onClick: deleteInput },
 	        '\xD7'
@@ -21724,7 +21724,7 @@
 	  };
 
 	  var deleteInput = function deleteInput() {
-	    setInputValue([]);
+	    setInputValue("");
 	    setHighlightedItem(-1);
 	  };
 
