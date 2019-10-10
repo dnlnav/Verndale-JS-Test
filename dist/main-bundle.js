@@ -9629,8 +9629,6 @@
 
 	'use strict';
 
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 	var _react = __webpack_require__(334);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -9639,95 +9637,48 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stateAPI = __webpack_require__(350);
+	var _appContainer = __webpack_require__(350);
 
-	var _app = __webpack_require__(352);
-
-	var _app2 = _interopRequireDefault(_app);
+	__webpack_require__(353);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function App() {
-	  var _useState = (0, _react.useState)(""),
-	      _useState2 = _slicedToArray(_useState, 2),
-	      inputState = _useState2[0],
-	      setInputState = _useState2[1];
-
-	  var _useState3 = (0, _react.useState)([]),
-	      _useState4 = _slicedToArray(_useState3, 2),
-	      stateList = _useState4[0],
-	      setStateList = _useState4[1];
-
-	  var _useState5 = (0, _react.useState)(false),
-	      _useState6 = _slicedToArray(_useState5, 2),
-	      stateSelected = _useState6[0],
-	      setStateSelected = _useState6[1];
-
-	  var _useState7 = (0, _react.useState)(-1),
-	      _useState8 = _slicedToArray(_useState7, 2),
-	      highlightedState = _useState8[0],
-	      setHighlightedState = _useState8[1];
-
-	  (0, _react.useEffect)(function () {
-	    if (inputState.length > 1 && !stateSelected) {
-	      (0, _stateAPI.fetchStates)(inputState, function (list) {
-	        return setStateList(list);
-	      });
-	    } else {
-	      setStateList([]);
-	    }
-	  }, [inputState]);
-
-	  var highlightStateAbove = function highlightStateAbove() {
-	    setHighlightedState(Math.max(highlightedState - 1, -1));
-	  };
-
-	  var highlightStateBelow = function highlightStateBelow() {
-	    setHighlightedState(Math.min(highlightedState + 1, stateList.length - 1));
-	  };
-
-	  var selectState = function selectState() {
-	    if (highlightedState > -1) {
-	      setInputState(stateList[highlightedState]);
-	      setStateList([]);
-	      setHighlightedState(-1);
-	      setStateSelected(true);
-	    }
-	  };
-
-	  var handleKeypress = function handleKeypress(event) {
-	    var key = event.keyCode;
-	    var keyEvents = {
-	      13: selectState,
-	      38: highlightStateAbove,
-	      40: highlightStateBelow
-	    };
-	    keyEvents[key] && keyEvents[key]();
-	  };
-
-	  var handleInputChange = function handleInputChange(event) {
-	    setInputState(event.target.value);
-	    stateSelected && setStateSelected(false);
-	  };
-
-	  var getInputValue = function getInputValue() {
-	    return highlightedState > -1 ? stateList[highlightedState] : inputState;
-	  };
+	  var _useListLogic = (0, _appContainer.useListLogic)(),
+	      inputValue = _useListLogic.inputValue,
+	      itemList = _useListLogic.itemList,
+	      highlightedItem = _useListLogic.highlightedItem,
+	      handleInputChange = _useListLogic.handleInputChange,
+	      handleKeypress = _useListLogic.handleKeypress,
+	      handleListItemHover = _useListLogic.handleListItemHover,
+	      deleteInput = _useListLogic.deleteInput,
+	      selectState = _useListLogic.selectState;
 
 	  return _react2.default.createElement(
 	    'div',
 	    null,
-	    _react2.default.createElement('input', { type: 'text',
-	      onChange: handleInputChange,
-	      onKeyDown: handleKeypress,
-	      value: getInputValue() }),
+	    _react2.default.createElement('input', { type: 'text', onChange: handleInputChange, onKeyDown: handleKeypress, value: inputValue }),
+	    _react2.default.createElement(
+	      'span',
+	      { onClick: deleteInput },
+	      '\xD7'
+	    ),
 	    _react2.default.createElement(
 	      'ul',
 	      { className: 'list' },
-	      stateList.map(function (state, index) {
+	      itemList.map(function (state, index) {
 	        return _react2.default.createElement(
 	          'li',
-	          { key: index, className: 'list__item ' + (index === highlightedState ? 'active' : '') },
+	          {
+	            key: index,
+	            className: 'list__item ' + (index === highlightedItem ? 'active' : ''),
+	            onMouseEnter: function onMouseEnter() {
+	              return handleListItemHover(index);
+	            },
+	            onClick: function onClick() {
+	              return selectState(index);
+	            }
+	          },
 	          state
 	        );
 	      })
@@ -21672,6 +21623,115 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	exports.useListLogic = useListLogic;
+
+	var _react = __webpack_require__(334);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _stateAPI = __webpack_require__(351);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function useListLogic() {
+	  var _useState = (0, _react.useState)(""),
+	      _useState2 = _slicedToArray(_useState, 2),
+	      inputValue = _useState2[0],
+	      setInputValue = _useState2[1];
+
+	  var _useState3 = (0, _react.useState)([]),
+	      _useState4 = _slicedToArray(_useState3, 2),
+	      list = _useState4[0],
+	      setList = _useState4[1];
+
+	  var _useState5 = (0, _react.useState)(false),
+	      _useState6 = _slicedToArray(_useState5, 2),
+	      itemSelected = _useState6[0],
+	      setItemSelected = _useState6[1];
+
+	  var _useState7 = (0, _react.useState)(-1),
+	      _useState8 = _slicedToArray(_useState7, 2),
+	      highlightedItem = _useState8[0],
+	      setHighlightedItem = _useState8[1];
+
+	  (0, _react.useEffect)(function () {
+	    if (inputValue.length > 1 && !itemSelected) {
+	      (0, _stateAPI.fetchStates)(inputValue, function (list) {
+	        return setList(list);
+	      });
+	    } else {
+	      setList([]);
+	    }
+	  }, [inputValue]);
+
+	  var handleKeypress = function handleKeypress(event) {
+	    var key = event.keyCode;
+	    var keyEvents = {
+	      13: selectState,
+	      38: highlightItemAbove,
+	      40: highlightItemBelow
+	    };
+	    keyEvents[key] && keyEvents[key]();
+	  };
+
+	  var handleInputChange = function handleInputChange(event) {
+	    setInputValue(event.target.value);
+	    itemSelected && setItemSelected(false);
+	  };
+
+	  var highlightItemAbove = function highlightItemAbove() {
+	    setHighlightedItem(Math.max(highlightedItem - 1, -1));
+	  };
+
+	  var highlightItemBelow = function highlightItemBelow() {
+	    setHighlightedItem(Math.min(highlightedItem + 1, list.length - 1));
+	  };
+
+	  var selectState = function selectState() {
+	    var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : highlightedItem;
+
+	    if (index > -1) {
+	      setInputValue(list[index]);
+	      setList([]);
+	      setHighlightedItem(-1);
+	      setItemSelected(true);
+	    }
+	  };
+
+	  var getInputValue = function getInputValue() {
+	    return highlightedItem > -1 ? list[highlightedItem] : inputValue;
+	  };
+
+	  var handleListItemHover = function handleListItemHover(index) {
+	    return setHighlightedItem(index);
+	  };
+
+	  return {
+	    highlightedItem: highlightedItem,
+	    handleInputChange: handleInputChange,
+	    handleKeypress: handleKeypress,
+	    handleListItemHover: handleListItemHover,
+	    selectState: selectState,
+	    itemList: list,
+	    inputValue: getInputValue(),
+	    deleteInput: function deleteInput() {
+	      return setInputValue([]);
+	    }
+	  };
+	}
+
+/***/ }),
+/* 351 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	exports.fetchStates = undefined;
 
 	var fetchStates = exports.fetchStates = function () {
@@ -21710,14 +21770,14 @@
 	  };
 	}();
 
-	var _stateAPIMapper = __webpack_require__(351);
+	var _stateAPIMapper = __webpack_require__(352);
 
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 	var URL = '/api/states?term=';
 
 /***/ }),
-/* 351 */
+/* 352 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -21733,16 +21793,16 @@
 	}
 
 /***/ }),
-/* 352 */
+/* 353 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(353);
+	var content = __webpack_require__(354);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(355)(content, {});
+	var update = __webpack_require__(356)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -21759,10 +21819,10 @@
 	}
 
 /***/ }),
-/* 353 */
+/* 354 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(354)();
+	exports = module.exports = __webpack_require__(355)();
 	// imports
 
 
@@ -21773,7 +21833,7 @@
 
 
 /***/ }),
-/* 354 */
+/* 355 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -21828,7 +21888,7 @@
 	};
 
 /***/ }),
-/* 355 */
+/* 356 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/*
