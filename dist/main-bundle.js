@@ -9655,13 +9655,17 @@
 	      selectState = _useListLogic.selectState;
 
 	  return _react2.default.createElement(
-	    'div',
+	    _react.Fragment,
 	    null,
-	    _react2.default.createElement('input', { type: 'text', onChange: handleInputChange, onKeyDown: handleKeypress, value: inputValue }),
 	    _react2.default.createElement(
-	      'span',
-	      { onClick: deleteInput },
-	      '\xD7'
+	      'div',
+	      { className: 'input-group' },
+	      _react2.default.createElement('input', { className: 'input', type: 'text', onChange: handleInputChange, onKeyDown: handleKeypress, value: inputValue }),
+	      _react2.default.createElement(
+	        'span',
+	        { className: 'delete-button', onClick: deleteInput },
+	        '\xD7'
+	      )
 	    ),
 	    _react2.default.createElement(
 	      'ul',
@@ -21667,26 +21671,18 @@
 	    }
 	  }, [inputValue]);
 
-	  var handleKeypress = function handleKeypress(event) {
-	    var key = event.keyCode;
-	    var keyEvents = {
-	      13: selectState,
-	      38: highlightItemAbove,
-	      40: highlightItemBelow
-	    };
-	    keyEvents[key] && keyEvents[key]();
-	  };
-
 	  var handleInputChange = function handleInputChange(event) {
 	    setInputValue(event.target.value);
 	    itemSelected && setItemSelected(false);
 	  };
 
-	  var highlightItemAbove = function highlightItemAbove() {
+	  var highlightItemAbove = function highlightItemAbove(event) {
+	    event.preventDefault();
 	    setHighlightedItem(Math.max(highlightedItem - 1, -1));
 	  };
 
-	  var highlightItemBelow = function highlightItemBelow() {
+	  var highlightItemBelow = function highlightItemBelow(event) {
+	    event.preventDefault();
 	    setHighlightedItem(Math.min(highlightedItem + 1, list.length - 1));
 	  };
 
@@ -21705,8 +21701,31 @@
 	    return highlightedItem > -1 ? list[highlightedItem] : inputValue;
 	  };
 
+	  var deleteCharacter = function deleteCharacter() {
+	    var value = getInputValue();
+	    setInputValue(getInputValue());
+	    setHighlightedItem(-1);
+	  };
+
+	  var handleKeypress = function handleKeypress(event) {
+	    var key = event.keyCode;
+	    var keyEvents = {
+	      13: function _() {
+	        return selectState();
+	      },
+	      38: highlightItemAbove,
+	      40: highlightItemBelow,
+	      8: deleteCharacter
+	    };
+	    keyEvents[key] && keyEvents[key](event);
+	  };
 	  var handleListItemHover = function handleListItemHover(index) {
 	    return setHighlightedItem(index);
+	  };
+
+	  var deleteInput = function deleteInput() {
+	    setInputValue([]);
+	    setHighlightedItem(-1);
 	  };
 
 	  return {
@@ -21717,9 +21736,7 @@
 	    selectState: selectState,
 	    itemList: list,
 	    inputValue: getInputValue(),
-	    deleteInput: function deleteInput() {
-	      return setInputValue([]);
-	    }
+	    deleteInput: deleteInput
 	  };
 	}
 
@@ -21827,7 +21844,7 @@
 
 
 	// module
-	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\nbody,\nhtml {\n  font-weight: normal;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; }\n\n.list .list__item.active {\n  color: red; }\n", ""]);
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\nbody,\nhtml {\n  font-weight: normal;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 16px; }\n\n#app {\n  max-width: 250px;\n  margin: 50px auto; }\n  #app .input-group {\n    position: relative; }\n    #app .input-group .input {\n      height: 35px;\n      width: 100%;\n      padding: 10px;\n      border-radius: 5px;\n      border: 1px solid lightgray;\n      font-size: 16px; }\n      #app .input-group .input:focus {\n        outline: 0; }\n    #app .input-group .delete-button {\n      position: absolute;\n      right: 4px;\n      top: 50%;\n      transform: translateY(-50%);\n      font-size: 16px;\n      background-color: lightgray;\n      padding: 0px 4px 2px 5px;\n      border-radius: 50%; }\n  #app .list {\n    width: 100%;\n    border: 1px solid lightgray;\n    padding: 14px 0 0;\n    box-sizing: border-box;\n    transform: translateY(-7px);\n    border-top: none;\n    max-height: 212px;\n    overflow-y: scroll; }\n    #app .list:empty {\n      display: none; }\n    #app .list .list__item {\n      padding: 10px; }\n      #app .list .list__item.active {\n        background-color: #82d1f3; }\n", ""]);
 
 	// exports
 

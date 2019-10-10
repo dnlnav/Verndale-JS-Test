@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { useListLogic } from './appContainer';
 import '../sass/app.scss';
@@ -15,9 +15,11 @@ function App() {
   } = useListLogic();
 
   return (
-    <div>
-      <input type="text" onChange={handleInputChange} onKeyDown={handleKeypress} value={inputValue} />
-      <span onClick={deleteInput}>&times;</span>
+    <Fragment>
+      <div className="input-group">
+        <input className="input" type="text" onChange={handleInputChange} onKeyDown={handleKeypress} value={inputValue} />
+        <span className="delete-button" onClick={deleteInput}>&times;</span>
+      </div>
       <ul className="list">
         {itemList.map((state, index) =>
           <li
@@ -30,7 +32,7 @@ function App() {
           </li>
         )}
       </ul>
-    </div>
+    </Fragment>
   )
 }
 

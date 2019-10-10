@@ -2,14 +2,55 @@
 
 body,
 html {
-	font-weight: normal;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
 }
 
-.list{
-	.list__item{
-		&.active{
-			color: red;
+#app {
+  max-width: 250px;
+  margin: 50px auto;
+  .input-group {
+    position: relative;
+    .input {
+      height: 35px;
+			width: 100%;
+			padding: 10px;
+      border-radius: 5px;
+			border: 1px solid lightgray;
+			font-size: 16px;
+      &:focus {
+        outline: 0;
+      }
+    }
+    .delete-button {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      background-color: lightgray;
+      padding: 0px 4px 2px 5px;
+      border-radius: 50%;
+    }
+  }
+  .list {
+    width: 100%;
+    border: 1px solid lightgray;
+    padding: 14px 0 0;
+    box-sizing: border-box;
+    transform: translateY(-7px);
+		border-top: none;
+		max-height: 212px;
+		overflow-y: scroll;
+		&:empty{
+			display: none;
 		}
-	}
+    .list__item {
+      padding: 10px;
+      &.active {
+        background-color: #82d1f3;
+      }
+    }
+  }
 }

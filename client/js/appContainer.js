@@ -15,26 +15,19 @@ export function useListLogic() {
     }
   }, [inputValue])
 
-  const handleKeypress = event => {
-    const key = event.keyCode;
-    const keyEvents = {
-      13: selectState,
-      38: highlightItemAbove,
-      40: highlightItemBelow,
-    };
-    keyEvents[key] && keyEvents[key]();
-  };
 
   const handleInputChange = event => {
     setInputValue(event.target.value);
     itemSelected && setItemSelected(false);
   };
 
-  const highlightItemAbove = () => {
+  const highlightItemAbove = event => {
+    event.preventDefault();
     setHighlightedItem(Math.max(highlightedItem - 1, -1))
   };
 
-  const highlightItemBelow = () => {
+  const highlightItemBelow = event => {
+    event.preventDefault();
     setHighlightedItem(Math.min(highlightedItem + 1, list.length - 1))
   };
 
@@ -49,7 +42,28 @@ export function useListLogic() {
 
   const getInputValue = () => highlightedItem > -1 ? list[highlightedItem] : inputValue;
 
+  const deleteCharacter = () => {
+    const value = getInputValue();
+    setInputValue(getInputValue());
+    setHighlightedItem(-1);
+  }
+
+  const handleKeypress = event => {
+    const key = event.keyCode;
+    const keyEvents = {
+      13: () => selectState(),
+      38: highlightItemAbove,
+      40: highlightItemBelow,
+      8: deleteCharacter,
+    };
+    keyEvents[key] && keyEvents[key](event);
+  };
   const handleListItemHover = index => setHighlightedItem(index);
+
+  const deleteInput = () => {
+    setInputValue([]);
+    setHighlightedItem(-1);
+  };
 
   return {
     highlightedItem,
@@ -59,6 +73,6 @@ export function useListLogic() {
     selectState,
     itemList: list,
     inputValue: getInputValue(),
-    deleteInput: () => setInputValue([]),
+    deleteInput,
   };
 }
