@@ -1,0 +1,15 @@
+@import "reset";
+
+body,
+html {
+	font-weight: normal;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.list{
+	.list__item{
+		&.active{
+			color: red;
+		}
+	}
+}
